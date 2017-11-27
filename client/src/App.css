@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+}
+
+.App {
+  height: 100vh;
+  width: 100vw;
+  text-align: left;
+  display: grid;
+  /*grid-template-rows: 1fr 3.5fr 4fr 1.5fr;*/
+  grid-template-rows: 0.5fr 3fr 5fr 2fr;
+  grid-template-areas: 'title' 'household' 'affinity' 'top';
+}
+
+.App * {
+  box-sizing: border-box;
+}
+
+.App-header {
+  grid-area: 'title';
+}
+
+.App-title {
+  text-align: center;
+  font-size: 2em;
+  margin: 0 0 0 0;
+  padding: 1%;
+}
+
+.Box{
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  grid-template-areas: 'header' , 'insight';
+  border-bottom: orange solid 1px;
+}
+
+.Households{
+  grid-area: 'household';
+}
+
+.Households .insight{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: 'form' 'numHH' 'houseimg';
+}
+
+#hhform{
+  grid-area: 'form';
+}
+
+.numHH{
+  grid-area: 'numHH';
+  padding: 1.5%;
+  font-size: 3em;
+  text-align: center;
+  margin: 0 0 0 0;
+}
+
+.houseimg{
+  grid-area: 'houseimg';
+}
+
+.Affinity{
+  grid-area: 'affinity';
+}
+
+.Affinity .insight{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: 'formAff' 'brandAff' 'imgAff'
+}
+
+.affinityForm{
+  grid-area: 'formAff';
+}
+
+.affinityBrand{
+  grid-area: 'brandAff';
+}
+
+.affinityImg{
+  grid-area: 'imgAff';
+}
+
+.Top{
+  grid-area: 'top';
+}
+
+.header{
+  grid-area: 'header';
+  background-color: orange;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3em;
+  height: 100%;
+  outline: 1px white solid;
+}
+
+.insight{
+  grid-area: 'insight';
+  height: 100%;
+  border-bottom: 1px orange solid;
+  display: flex;
+  align-items: center;
+  padding: 1%;
+}
+
+select{
+  border: orange 1px solid;
+  font-family: 'Opens Sans', sans-serif;
+  font-size: 1em;
+  padding: 0.5%;
+  width: 9.5em;
+}
+
+input {
+  padding: 0.5%;
+  width: 6em;
+}
+
+.submit-btn{
+  background-color: orange;
+  border: none;
+  color: white;
+  padding: 1.5%;
+  margin: 1%;
+  font-size: 1em;
+  text-align: center;
+  text-decoration: none;
+  width: 9em;
+}

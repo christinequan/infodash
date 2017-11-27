@@ -1,0 +1,102 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(readr)
+library(stringr)
+```
+
+```{r}
+trips_gdrive %>% count(`Parent Brand`, Retailer)
+```
+
+
+```{r}
+trips_gdrive %>% count(Retailer, `Parent Brand`) %>%
+  arrange(`Parent Brand`, desc(n)) 
+```
+
+```{r}
+num_HH <- n_distinct(trips_gdrive$`User ID`)
+num_HH
+```
+
+3. Top Buying Rate
+```{r}
+num_HH <- n_distinct(trips_gdrive$`User ID`)
+trips_gdrive %>%
+  mutate(itemDollars = as.integer(str_sub(`Item Dollars`, 2, -1))) %>%
+  mutate(total_spend = itemDollars) %>%
+  group_by(`Parent Brand`) %>%
+  summarise(buyrate = sum(total_spend/num_HH)) %>%
+  arrange(desc(buyrate))
+```
+1 Strongest Affinity
+
+```{r, eval=FALSE}
+trips_gdrive %>% 
+  group_by(`User ID`, `Parent Brand`) %>%
+  mutate(itemDollars = as.integer(str_sub(`Item Dollars`, 2, -1))) %>%
+  mutate(total_spend = itemDollars * `Item Units`) %>%
+  group_by(`User ID`, `Parent Brand`) %>%
+  summarise(totals = sum(total_spend))
+```
+
+# Brand Affinity
+```{r}
+trips_gdrive %>%
+  count(`Parent Brand`, Retailer) %>%
+  group_by(Retailer) %>%
+  mutate(percent_by_retailer = n/sum(n)*100) %>% 
+  group_by(`Parent Brand`) %>%
+  arrange(`Parent Brand`, percent_by_retailer) %>%
+  mutate(retailer_rank = row_number()) %>%
+  ggplot() + 
+  geom_point(mapping = aes(x = `Parent Brand`, y = Retailer,
+                           color = retailer_rank, 
+                           size = percent_by_retailer))
+```
+
+```{r}
+trips_gdrive %>%
+  count(`Parent Brand`, Retailer) %>% View()
+```
+
+Do duplicates matter? What is the percentage that item count > 1? 
+```{r}
+trips_gdrive %>%
+  count(`Item Units` == 1)
+```
+Ok. Since multiples (Item Units > 1) only account for 30% of the purchases, I will ignore those. They are more noise than signal.
+
+I also looked to see if they were duplicate trip IDs, which would denote a person buying more than one brand per trip. 
+
+This happened only on a small scale so again, this will be labeled as noise. 
+
+To determine brand affinity, I will define it from the perspective of 'if I am going to x retailer, what brand am I most likely to purchase?' And then I will look at each brand and return the store with which they contribute to the largest slice of sales. There are many angles I could use to measure brand strength (number of dollars, number of units sold, number of unique users). But I will use trips since I like to understand brand affinity from the perspective of each time a person goes out to buy something at a retailer, which brand will they likely purchase. 
+
+Percent of sales by store, trips not item units (get to that later)
+```{r}
+trips_gdrive %>%
+  count(Retailer, `Parent Brand`) %>%
+  group_by(Retailer) %>%
+  mutate(percent = n/sum(n)) %>% 
+  arrange(`Parent Brand`, desc(percent))
+```
+
+Counts
+```{r}
+trips_gdrive %>%
+  count(Retailer, `Parent Brand`) %>%
+  arrange(`Parent Brand`, desc(n))
+```
+
+
+```{r}
+trips_gdrive %>%
+  count(`Retailer`) %>% arrange(desc(n))
+```
+This shows that Walmart has the most trips of any of the stores...something to keep in mind. 
